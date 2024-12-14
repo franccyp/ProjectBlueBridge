@@ -14,7 +14,7 @@ Dieses Projekt ist eine webbasierte Lösung zur Anzeige und Verwaltung aktiver P
 - Erstellung von Detailansichten für einzelne Projekte mit benutzerfreundlichem Design.
 - Implementierung von Backend-Filtern für eine effiziente Datenverwaltung.
 
-#Technologien
+# Technologien
 - Backend: PHP
 - Frontend: Dynamische HTML-Oberfläche
 - API: Blue Ant REST-Webservices
