@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*Menüleiste*/
+ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #87cefa;
+    margin-top: 30vh;
+}
+
+ul.menu li {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #cccccc;
+}
+
+ul.menu li a {
+    text-decoration: none;
+    color: #F8F8FF;
+    display: block;
+}
+
+ul.menu li a:hover {
+//background-color: #ADD8E6;
+    color: #000000;
+}
