@@ -5,26 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width-device-width, initial-scale=1.0">
     <title>Projektübersicht</title>
-    <link rel="stylesheet" href="Design.css">
+    <link rel="stylesheet" href="Design.css"> <!-- CSS-Datei wird eingebunden-->
 </head>
 <body>
-<ul class="menu">
-    <?php
-    // Menü-Elemente untereinander anordnen
-    $menuItems = [
-        "Projektübersicht" => "projektübersicht",
-        "Dashboard" => "dashboard.php",
-        "Settings" => "settings.php",
-        "Help" => "help.php",
-    ];
+    <ul class="menu">
+       <li><a href="index.php?page=projektuebersicht">Projektübersicht</a></li>
+       <li><a href="index.php?page=dashboard">Dashboard</a></li>
+       <li><a href="index.php?page=hilfe">Hilfe</a></li>
+    </ul>
 
-    // Menü dynamisch ausgeben
-    foreach ($menuItems as $name => $link) {
-        echo "<li><a href='$link'>$name</a></li>";
-    }
+    <!--Dynamischer Seiteninhalt-->
+    <div class="page-title">
+        <?php
+        $page = isset($_GET['page']) ? $_GET['page'] : 'projektuebersicht'; //Standardseite
 
-
-    ?>
-</ul>
+        // Seiteninhalt wird je nach Seite ausgelesen
+        switch ($page) {
+            case 'projektuebersicht':
+                include 'projektuebersicht.php';
+                break;
+            case 'dashboard':
+                include 'dashboard.php';
+                break;
+            case 'hilfe':
+                include 'hilfe.php';
+                break;
+            default:
+                echo "<h1>Seite nicht gefunden!</h1>";
+        }
+        ?>
+    </div>
 </body>
 </html>
