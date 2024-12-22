@@ -36,7 +36,16 @@ $html .= '</tbody>';
 }
 
 $array = array(
-    array('Status'=>'Gut', 'Projektname'=>'Projekt A', 'Bereich'=>'Finanze', 'Projektleider'=>'David Assmann','Startdatum'=>'02/01/2024','Enddatum'=>'06/07/2024'),
+    array('Status'=>'Gut', 'Projektname'=>'Project A', 'Bereich'=>'Finance', 'Projektleiter'=>'David Assmann', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Schlecht', 'Projektname'=>'Project B', 'Bereich'=>'IT', 'Projektleiter'=>'Amelie Seidl', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Schlecht', 'Projektname'=>'Project C', 'Bereich'=>'Governance', 'Projektleiter'=>'Max Musterfrau', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Information', 'Projektname'=>'Project D', 'Bereich'=>'R&D', 'Projektleiter'=>'Tom Musterman', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Gut', 'Projektname'=>'Project E', 'Bereich'=>'Science', 'Projektleiter'=>'Anna Schmitt', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Schlecht', 'Projektname'=>'Project F', 'Bereich'=>'Finance', 'Projektleiter'=>'Max Musterman', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Schlecht', 'Projektname'=>'Project G', 'Bereich'=>'Finance', 'Projektleiter'=>'Max Musterman', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Information', 'Projektname'=>'Project H', 'Bereich'=>'Finance', 'Projektleiter'=>'Max Musterman', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Information', 'Projektname'=>'Project I', 'Bereich'=>'Finance', 'Projektleiter'=>'Max Musterman', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
+    array('Status'=>'Gut', 'Projektname'=>'Project J', 'Bereich'=>'Finance', 'Projektleiter'=>'Max Musterman', 'Startdatum'=>'02/01/2024', 'Enddatum'=>'06/07/2024'),
 
 );
 
