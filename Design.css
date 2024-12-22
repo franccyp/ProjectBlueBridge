@@ -4,29 +4,52 @@
     box-sizing: border-box;
 }
 
+.page-title {
+    margin: 0;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+    position: fixed;
+    top: 0; /* Überschrift bleibt oben*/
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Überschrift bleibt über dem Menü*/
+    font-size: 24px;
+    color: black;
+}
+
 /*Menüleiste*/
-ul.menu {
+.menu {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    position: fixed;
     width: 200px;
+    top: 50px;
+    left: 0;
     background-color: #87cefa;
-    margin-top: 30vh;
+
 }
 
-ul.menu li {
+.menu li {
     display: block;
-    padding: 10px;
+    padding: 15px;
     border-bottom: 1px solid #cccccc;
 }
 
-ul.menu li a {
+.menu li a {
     text-decoration: none;
     color: #F8F8FF;
     display: block;
 }
-
-ul.menu li a:hover {
-//background-color: #ADD8E6;
+.menu li a:hover {
     color: #000000;
+}
+
+
+.content {
+    margin-top: 100px;
+    padding: 20px;
+    /*min-height: 100vh;*/ /* vollständige Höhe*/
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
 }
