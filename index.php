@@ -12,6 +12,7 @@
     <ul class="menu">
        <li><a href="index.php?page=projektuebersicht">Projektübersicht</a></li>
        <li><a href="index.php?page=dashboard">Dashboard</a></li>
+        <li><a href="index.php?page=projekteinzelansicht">Projekteinzelansicht</a></li>
        <li><a href="index.php?page=hilfe">Hilfe</a></li>
     </ul>
 
@@ -27,6 +28,9 @@
                 break;
             case 'dashboard':
                 include 'dashboard.php';
+                break;
+            case 'projekteinzelansicht':
+                include 'projekteinzelansicht.php';
                 break;
             case 'hilfe':
                 include 'hilfe.php';
