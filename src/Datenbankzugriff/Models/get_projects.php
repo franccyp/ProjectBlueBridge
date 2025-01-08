@@ -51,9 +51,4 @@ include "config.php";
   }
 
 
-  
-  //$manager->all_projects();
-
-
-
 ?>
