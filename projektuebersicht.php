@@ -41,6 +41,39 @@
     <!-- Main Content -->
     <main class="flex-1 p-6">
         <h1 class="text-2xl font-bold mb-6">Projektübersicht</h1>
+
+        <!-- Filterbereich -->
+        <div class="flex items-center mb-6 space-x-4">
+            <svg class="w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h4m2 0h4m-6 6H4m2 0H4m14 0h2m-6 6H4m2 0H4m14 0h2"/>
+            </svg>
+            <select class="border rounded px-3 py-2">
+                <option>Projektleiter*in</option>
+                <option>David Assmann</option>
+                <option>Amelie Seidl</option>
+                <option>Max Musterman</option>
+            </select>
+            <select class="border rounded px-3 py-2">
+                <option>Bereich</option>
+                <option>Finance</option>
+                <option>IT</option>
+                <option>Governance</option>
+                <option>Science</option>
+            </select>
+            <select class="border rounded px-3 py-2">
+                <option>Startdatum</option>
+            </select>
+            <select class="border rounded px-3 py-2">
+                <option>Enddatum</option>
+            </select>
+            <select class="border rounded px-3 py-2">
+                <option>Status</option>
+                <option>Gut</option>
+                <option>Schlecht</option>
+                <option>Information</option>
+            </select>
+        </div>
+
         <?php
         function build_table($array) {
             $html = '<table class="w-full text-sm text-left text-gray-500 border-collapse">';
@@ -58,16 +91,16 @@
 
             foreach ($array as $value) {
                 $html .= '<tr class="bg-white border-b">';
-                $status_color = '';
+                $status_icon = '';
                 if ($value['Status'] == 'Gut') {
-                    $status_color = 'text-green-500 bg-green-100';
+                    $status_icon = '<svg class="w-6 h-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>';
                 } elseif ($value['Status'] == 'Schlecht') {
-                    $status_color = 'text-red-500 bg-red-100';
+                    $status_icon = '<svg class="w-6 h-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
                 } elseif ($value['Status'] == 'Information') {
-                    $status_color = 'text-blue-500 bg-blue-100';
+                    $status_icon = '<svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 17h.01M21 11.5a8.38 8.38 0 01-6.79 8.35 8.25 8.25 0 01-9.62-6.35A8.38 8.38 0 0112 3.5a8.25 8.25 0 019.62 6.35A8.38 8.38 0 0121 11.5z"/></svg>';
                 }
 
-                $html .= '<td class="px-6 py-4"><span class="' . $status_color . ' px-3 py-1 rounded-full">' . $value['Status'] . '</span></td>';
+                $html .= '<td class="px-6 py-4">' . $status_icon . '</td>';
                 $html .= '<td class="px-6 py-4">' . htmlspecialchars($value['Projektname']) . '</td>';
                 $html .= '<td class="px-6 py-4">' . htmlspecialchars($value['Bereich']) . '</td>';
                 $html .= '<td class="px-6 py-4">' . htmlspecialchars($value['Projektleiter']) . '</td>';
