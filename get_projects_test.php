@@ -1,8 +1,6 @@
 <?php
-
-include "get_projects.php";
 include "menu.php";
-
+include "get_projects.php";
 
 class ProjectManagerTest {
 
@@ -80,7 +78,6 @@ class ProjectManagerTest {
      */
     function test_get_projects_filter_name() {
         $manager = new ProjectManager();
-
         $manager->get_project_filter_name('Project BlueBridge'); // bei name den Namen des Projekts für Einzelansicht
     }
 
@@ -89,6 +86,15 @@ class ProjectManagerTest {
      */
     function test_get_all_projects() {
         $this->display_all_projects();
+    }
+
+    /**
+     * Testet die Projektsuche anhand eines Filters (z. B. nach Namen).
+     */
+    function test_get_projects_filter_id($project_id) {
+        $manager = new ProjectManager();
+        $project = $manager->get_project_by_id($project_id); // bei name den Namen des Projekts für Einzelansicht
+        print_r($project);
     }
 }
 
@@ -99,5 +105,6 @@ class ProjectManagerTest {
 $project_manager_test = new ProjectManagerTest();
 $project_manager_test->display_all_projects();
 $project_manager_test->test_get_all_projects();
+$project_manager_test->test_get_projects_filter_id(358638433);
 ?>
 

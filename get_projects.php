@@ -1,6 +1,4 @@
 <?php
-
-include "project.php";
 include "config.php";
 
 class ProjectManager {
@@ -41,7 +39,7 @@ class ProjectManager {
     }
 
     function get_project_by_id($project_id){
-        $new_curl_filter_url = project_url . "/" . urlencode($project_id);
+        $new_curl_filter_url = project_url . "/" .$project_id;
         $response = $this->get_method_url($new_curl_filter_url);
         // print($response);
         return json_decode($response, true);
