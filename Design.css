@@ -1,55 +1,79 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.page-title {
-    margin: 0;
-    padding: 20px;
-    background-color: white;
-    text-align: center;
-    position: fixed;
-    top: 0; /* Überschrift bleibt oben*/
-    left: 0;
+/* Container für Menüleiste und Inhalt */
+.container {
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    z-index: 10; /* Überschrift bleibt über dem Menü*/
-    font-size: 24px;
-    color: black;
 }
 
-/*Menüleiste*/
-.menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    width: 200px;
-    top: 50px;
-    left: 0;
-    background-color: #87cefa;
-
-}
-
-.menu li {
-    display: block;
+/* Menüleiste */
+.sidebar {
     padding: 15px;
-    border-bottom: 1px solid #cccccc;
+    width: 20%;
+    background-color: #87CEEB;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.menu li a {
+.sidebar ul {
+    list-style: none;
+    padding: 20px;
+    margin: 20px;
+}
+
+.sidebar ul li {
+    padding: 20px;
+}
+
+.sidebar ul li a {
     text-decoration: none;
-    color: #F8F8FF;
-    display: block;
-}
-.menu li a:hover {
-    color: #000000;
+    color: #FFFFFF;
+    font-weight: bold
 }
 
+.sidebar ul li a:hover {
+    color: #696969; /* Farbe beim Hover-Effekt */
+}
 
+.flex.min-h-screen {
+    display: flex;
+    min-height: 100vh;
+}
+
+aside {
+    width: 20%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hauptinhalt */
 .content {
     margin-top: 100px;
     padding: 20px;
-    /*min-height: 100vh;*/ /* vollständige Höhe*/
-    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+}
+
+/* Tabelle */
+.project-table {
+    width: 100%; /* Die Tabelle füllt nur den Bereich des Inhalts aus */
+    border-collapse: collapse;
+    font-size: 18px;
+    text-align: left;
+}
+
+.project-table th,
+.project-table td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+}
+
+.project-table thead th {
+    background-color: #f4f4f4; /* Hintergrundfarbe für die Kopfzeile */
+
+}
+
+.project-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Streifenmuster für die Zeilen */
+}
+
+.project-table tbody tr:hover {
+    background-color: #f1f1f1;
 }
