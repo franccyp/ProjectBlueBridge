@@ -10,16 +10,29 @@ class ProjectIndividualView {
      * Zeigt Details zu einem einzelnen Projekt an.
      */
     public function display_project_details($projectId) {
+        echo "Hello";
         $menu = new Menu(); // Menü erstellen
         $manager = new ProjectManager();
+        $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        // Use parse_url() function to parse the URL
+        // and return an associative array which
+        // contains its various components
+        $url_components = parse_url($actual_link );
+
+        // Use parse_str() function to parse the
+        // string passed via URL
+        parse_str($url_components['query'], $params);
+
+        $projectId = $params['project_id'];
+        echo $projectId;
 
         // Projekt-ID über die URL holen
-        $projectId = isset($_GET['project_id']) ? $_GET['project_id'] : null;
+        //$projectId = isset($_GET['project_id']) ? $_GET['project_id'] : null;
+        //echo $projectId;
 
         if ($projectId) {
             // Einzelprojekt basierend auf ID abrufen
-            $projects_json = $manager->get_method_url(project_url . '/' . $projectId);
-            $project_data = json_decode($projects_json, true);
+            $project_data = $manager->get_project_by_id($projectId);
 
             // Überprüfung ob Projekt existiert
             if (!$project_data || !isset($project_data['id'])) {
@@ -60,13 +73,23 @@ class ProjectIndividualView {
         }
     }
 
-    function test_get_projects_filter_name() {
-        $manager = new ProjectManager();
-        $manager->get_project_filter_name('kjkhjh'); // bei name den Namen des Projekts für Einzelansicht
-    }
+    // function test_get_projects_filter_name() {
+    //   $manager = new ProjectManager();
+    // $manager->get_project_filter_name('358638433'); // bei name den Namen des Projekts für Einzelansicht
+    //}
+
+
 
     function test_get_all_projects() {
         $this->display_project_details(1);
+    }
+
+    public function get_project_by_id($project_id) {
+        $manager = new ProjectManager();
+        //  $manager = $this->get_project_by_id($project_id);
+        $project = $manager->get_project_by_id($project_id);
+        print($project);
+        return $project;
     }
 }
 
@@ -78,7 +101,9 @@ class ProjectIndividualView {
 // Instanz des Viewers und Anzeige eines Projekts basierend auf der übergebenen ID
 $project_view = new ProjectIndividualView();
 $project_view->display_project_details($_GET['project_id']);
-$project_view->test_get_projects_filter_name();
+$project_view->get_project_by_id($_GET['project_id']);
 $project_view->test_get_all_projects();
 ?>
+
+
 

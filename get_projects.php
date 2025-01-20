@@ -1,7 +1,7 @@
 <?php
 
 include "project.php";
-include "Config.php";
+include "config.php";
 
 class ProjectManager {
     function get_method_url($url){
@@ -40,15 +40,21 @@ class ProjectManager {
         return $this->get_method_url(project_url);
     }
 
-    function get_project_filter_name( $name_project){
+    function get_project_by_id($project_id){
+        $new_curl_filter_url = project_url . "/" . urlencode($project_id);
+        $response = $this->get_method_url($new_curl_filter_url);
+        // print($response);
+        return json_decode($response, true);
+    }
+
+    function get_project_filter_name($name_project){
         $encode_filter_name = urlencode($name_project);
         $new_curl_filter_url = project_url ."?name=" .$encode_filter_name;
-        print_r($new_curl_filter_url);
-        $this->get_method_url($new_curl_filter_url);
+        print($new_curl_filter_url);
+        return $this->get_method_url($new_curl_filter_url);
     }
 
 }
 
 
 ?>
-
