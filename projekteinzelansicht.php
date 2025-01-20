@@ -21,15 +21,13 @@ class ProjectIndividualView {
      * Zeigt Details zu einem einzelnen Projekt an.
      */
     public function display_project_details() {
-        echo "Hello";
-
+       
         $menu = new Menu(); // Menü erstellen
 
         $manager = new ProjectManager();
 
         $projectId = $this->get_project_id_from_url();
         
-        echo $projectId;
 
         // Projekt-ID über die URL holen
         //$projectId = isset($_GET['project_id']) ? $_GET['project_id'] : null;
@@ -40,11 +38,13 @@ class ProjectIndividualView {
             $project_data = $manager->get_project_by_id($projectId);
 
             // Überprüfung ob Projekt existiert
-            if (!$project_data || !isset($project_data['id'])) {
+            if (!$project_data || !isset($project_data['project'])) {
                 echo "<p>Projekt nicht gefunden.</p>";
                 return;
             }
-
+			
+			$project_data = $project_data['project'];
+			
             // Einzelprojekt Details anzeigen
             echo '<!DOCTYPE html>';
             echo '<html lang="en">';
@@ -106,6 +106,3 @@ class ProjectIndividualView {
 $project_view = new ProjectIndividualView();
 $project_view->display_project_details();
 ?>
-
-
-
