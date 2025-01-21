@@ -163,6 +163,10 @@ class ProjectIndividualView {
             echo '<p>Ungültige Projekt-ID.</p>';
         }
     }
+    
+    
+    
+    
 }
 
 // Instanz erstellen und aufrufen
