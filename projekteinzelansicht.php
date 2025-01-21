@@ -7,7 +7,7 @@ class ProjectIndividualView {
     private function get_project_id_from_url(){
 
         $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        
+
         $url_components = parse_url($actual_link );
 
         parse_str($url_components['query'], $params);
@@ -21,13 +21,13 @@ class ProjectIndividualView {
      * Zeigt Details zu einem einzelnen Projekt an.
      */
     public function display_project_details() {
-       
+
         $menu = new Menu(); // Menü erstellen
 
         $manager = new ProjectManager();
 
         $projectId = $this->get_project_id_from_url();
-        
+
 
         // Projekt-ID über die URL holen
         //$projectId = isset($_GET['project_id']) ? $_GET['project_id'] : null;
@@ -42,9 +42,9 @@ class ProjectIndividualView {
                 echo "<p>Projekt nicht gefunden.</p>";
                 return;
             }
-			
-			$project_data = $project_data['project'];
-			
+
+            $project_data = $project_data['project'];
+
             // Einzelprojekt Details anzeigen
             echo '<!DOCTYPE html>';
             echo '<html lang="en">';
@@ -62,14 +62,16 @@ class ProjectIndividualView {
             // Einzelprojekt-Inhalt
             echo '<div class="content">';
             echo '<h1>Projekt Einzelansicht</h1>';
+            echo '<div class="date-box"<div class="date-box" style="background-color: #87CEEB; color: white; position: absolute; right: 100px; top: 30%; transform: translateY(-50%);">';
+            echo '<p><strong>Starttermin:</strong> ' . htmlspecialchars(isset($project_data['start']) ? $project_data['start'] : 'Unbekannt') . '</p>';
+            echo '<p><strong>Endetermin:</strong> ' . htmlspecialchars(isset($project_data['end']) ? $project_data['end'] : 'Unbekannt') . '</p>';
+            echo '</div>';
             echo '<p><strong>ID:</strong> ' . htmlspecialchars($project_data['id']) . '</p>';
             echo '<p><strong>Name:</strong> ' . htmlspecialchars($project_data['name']) . '</p>';
             echo '<p><strong>Projektleiter:</strong> ' . htmlspecialchars(isset($project_data['projectLeaderId']) ? $project_data['projectLeaderId'] : 'Keine Beschreibung') . '</p>';
-            echo '<p><strong>Starttermin:</strong> ' . htmlspecialchars(isset($project_data['start']) ? $project_data['start'] : 'Unbekannt') . '</p>';
-            echo '<p><strong>Endetermin:</strong> ' . htmlspecialchars(isset($project_data['end']) ? $project_data['end'] : 'Unbekannt') . '</p>';
+            echo '<p><strong>Planungstyp:</strong> ' . htmlspecialchars(isset($project_data['planningType']) ? $project_data['planningType'] : 'Unbekannt') . '</p>';
 
             echo '</div>'; // End des Hauptinhalts
-
             echo '</div>'; // End des flex containers
             echo '</body>';
             echo '</html>';
