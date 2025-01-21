@@ -45,10 +45,10 @@ class ProjectManagerTest {
         echo "<thead>";
         echo "<tr>";
         echo "<th>ID</th>";
-        echo "<th>Name</th>";
+        echo "<th>Projektname</th>";
         echo "<th>Projektleiter</th>";
-        echo "<th>Starttermin</th>";
-        echo "<th>Endetermin</th>";
+        echo "<th>Startdatum</th>";
+        echo "<th>Enddatum</th>";
         echo "</tr>";
         echo "</thead>";
         echo "<tbody>";
