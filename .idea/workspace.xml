@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Hintegrund einfarbig">
+    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Projektleier in der Übersicht und im Design 3 SPalten für Einzelansicht">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Design.css" beforeDir="false" afterPath="$PROJECT_DIR$/Design.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/get_projects_test.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_projects_test.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projekteinzelansicht.php" beforeDir="false" afterPath="$PROJECT_DIR$/projekteinzelansicht.php" afterDir="false" />
     </list>
@@ -77,7 +78,7 @@
       <workItem from="1737414387670" duration="4954000" />
       <workItem from="1737420315032" duration="564000" />
       <workItem from="1737452309634" duration="41000" />
-      <workItem from="1737480007625" duration="13102000" />
+      <workItem from="1737480007625" duration="15021000" />
     </task>
     <task id="LOCAL-00001" summary="zwischen">
       <option name="closed" value="true" />
@@ -127,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737494079082</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Projektleier in der Übersicht und im Design 3 SPalten für Einzelansicht">
+      <option name="closed" value="true" />
+      <created>1737495090307</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1737495090307</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +161,7 @@
     <MESSAGE value="+" />
     <MESSAGE value="Projekteinzelansicht frontend" />
     <MESSAGE value="Hintegrund einfarbig" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hintegrund einfarbig" />
+    <MESSAGE value="Projektleier in der Übersicht und im Design 3 SPalten für Einzelansicht" />
+    <option name="LAST_COMMIT_MESSAGE" value="Projektleier in der Übersicht und im Design 3 SPalten für Einzelansicht" />
   </component>
 </project>

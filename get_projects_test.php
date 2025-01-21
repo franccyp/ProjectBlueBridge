@@ -59,7 +59,6 @@ class ProjectManagerTest {
         echo '<body>';
         echo '<div class="flex min-h-screen">';
 
-        $menu->renderMenu();
 
         // Tabelle generieren
         echo '<div class="content">';
