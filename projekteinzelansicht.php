@@ -91,6 +91,18 @@ class ProjectIndividualView {
             $department = $this->departmentMapping[$project_data['departmentId']] ?? 'Keine Angabe';
             $projectLeader = $this->get_person_name($project_data['projectLeaderId'] ?? null);
 
+            // Daten für die Boxen vorbereiten
+            $fields = [
+                'ID' => htmlspecialchars($project_data['id']),
+                'Name' => htmlspecialchars($project_data['name']),
+                'Projektleiter' => htmlspecialchars($projectLeader),
+                'Starttermin' => htmlspecialchars($project_data['start'] ?? 'Unbekannt'),
+                'Endtermin' => htmlspecialchars($project_data['end'] ?? 'Unbekannt'),
+                'Unternehmensbereich' => htmlspecialchars($department),
+                'Priorität' => htmlspecialchars($priority),
+                'Projektstatus' => htmlspecialchars($status)
+            ];
+
             // Ausgabe des HTML
             echo '<!DOCTYPE html>';
             echo '<html lang="en">';
@@ -106,67 +118,30 @@ class ProjectIndividualView {
             echo '<div id="projekt-container">';
             echo '<h1>Projekt Einzelansicht</h1>';
 
-            // Dynamische Boxen erstellen
+            // Dynamische Reihen erzeugen
             echo '<div class="project-row">';
-            echo '<div class="project-box">';
-            echo '<div class="title">ID</div>';
-            echo '<div class="value">' . htmlspecialchars($project_data['id']) . '</div>';
-            echo '</div>';
+            $counter = 0; // Zählt die Boxen in der Reihe
+            foreach ($fields as $title => $value) {
+                echo '<div class="project-box">';
+                echo '<div class="title">' . $title . '</div>';
+                echo '<div class="value">' . $value . '</div>';
+                echo '</div>';
 
-            echo '<div class="project-box">';
-            echo '<div class="title">Name</div>';
-            echo '<div class="value">' . htmlspecialchars($project_data['name']) . '</div>';
-            echo '</div>';
-            echo '</div>'; // Ende der ersten Reihe
-
-            echo '<div class="project-row">';
-            echo '<div class="project-box">';
-            echo '<div class="title">Projektleiter</div>';
-            echo '<div class="value">' . htmlspecialchars($projectLeader) . '</div>';
-            echo '</div>';
-
-            echo '<div class="project-box">';
-            echo '<div class="title">Starttermin</div>';
-            echo '<div class="value">' . htmlspecialchars($project_data['start'] ?? 'Unbekannt') . '</div>';
-            echo '</div>';
-            echo '</div>'; // Ende der zweiten Reihe
-
-            echo '<div class="project-row">';
-            echo '<div class="project-box">';
-            echo '<div class="title">Endtermin</div>';
-            echo '<div class="value">' . htmlspecialchars($project_data['end'] ?? 'Unbekannt') . '</div>';
-            echo '</div>';
-
-            echo '<div class="project-box">';
-            echo '<div class="title">Unternehmensbereich</div>';
-            echo '<div class="value">' . htmlspecialchars($department) . '</div>';
-            echo '</div>';
-            echo '</div>'; // Ende der dritten Reihe
-
-            echo '<div class="project-row">';
-            echo '<div class="project-box">';
-            echo '<div class="title">Priorität</div>';
-            echo '<div class="value">' . htmlspecialchars($priority) . '</div>';
-            echo '</div>';
-
-            echo '<div class="project-box">';
-            echo '<div class="title">Projektstatus</div>';
-            echo '<div class="value">' . htmlspecialchars($status) . '</div>';
-            echo '</div>';
-            echo '</div>'; // Ende der vierten Reihe
-
-            echo '</div>'; // Ende Container
-            echo '</div>'; // Ende flex
+                $counter++;
+                // Wenn drei Boxen gefüllt sind, neue Reihe starten
+                if ($counter % 3 == 0) {
+                    echo '</div><div class="project-row">'; // Schließt die aktuelle Reihe und startet eine neue
+                }
+            }
+            echo '</div>'; // Schließt die letzte Reihe
+            echo '</div>'; // Schließt den Container
+            echo '</div>'; // Schließt den Flex-Container
             echo '</body>';
             echo '</html>';
         } else {
             echo '<p>Ungültige Projekt-ID.</p>';
         }
     }
-    
-    
-    
-    
 }
 
 // Instanz erstellen und aufrufen

@@ -3,7 +3,30 @@ include "menu.php";
 include "get_projects.php";
 
 class ProjectManagerTest {
+    private $personCache = []; // Cache für Namen von Personen
 
+    /**
+     * Holt den vollständigen Namen einer Person anhand der ID.
+     */
+    private function get_person_name($personId) {
+        // Überprüfen, ob der Name bereits im Cache ist
+        if (isset($this->personCache[$personId])) {
+            return $this->personCache[$personId];
+        }
+
+        $manager = new ProjectManager();
+        $personUrl = 'https://dashboard-examples.blueant.cloud/rest/v1/human/persons/' . $personId;
+        $response = $manager->get_method_url($personUrl);
+        $data = json_decode($response, true);
+
+        if (isset($data['person']['firstname'], $data['person']['lastname'])) {
+            $fullname = $data['person']['firstname'] . ' ' . $data['person']['lastname'];
+            $this->personCache[$personId] = $fullname; // Im Cache speichern
+            return $fullname;
+        }
+
+        return 'Unbekannter Projektleiter';
+    }
 
     /**
      * Zeigt alle Projekte in einer Tabelle an.
@@ -54,12 +77,16 @@ class ProjectManagerTest {
         echo "<tbody>";
 
         foreach ($projects['projects'] as $project) {
+            $projectLeaderName = isset($project['projectLeaderId'])
+                ? $this->get_person_name($project['projectLeaderId'])
+                : 'Unbekannt';
+
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($project['id']) . "</td>";
-            echo "<td>" . htmlspecialchars($project['name']) . "</td>";
-            echo "<td>" . htmlspecialchars(isset($project['projectLeaderId']) ? $project['projectLeaderId'] : 'Keine Beschreibung') . "</td>";
-            echo "<td>" . htmlspecialchars(isset($project['start']) ? $project['start'] : 'Unbekannt') . "</td>";
-            echo "<td>" . htmlspecialchars(isset($project['end']) ? $project['end'] : 'Unbekannt') . "</td>";
+            echo "<td>" . htmlspecialchars($project['id']) . "</td>"; // Projekt-ID
+            echo "<td>" . htmlspecialchars($project['name']) . "</td>"; // Projektname
+            echo "<td>" . htmlspecialchars($projectLeaderName) . "</td>"; // Projektleiter als Name
+            echo "<td>" . htmlspecialchars(isset($project['start']) ? $project['start'] : 'Unbekannt') . "</td>"; // Startdatum
+            echo "<td>" . htmlspecialchars(isset($project['end']) ? $project['end'] : 'Unbekannt') . "</td>"; // Enddatum
             echo "<td><a href='projekteinzelansicht.php?project_id=" . $project['id'] . "'>Details</a></td>"; // Link zur Einzelansicht hinzufügen
             echo "</tr>";
         }
@@ -87,16 +114,9 @@ class ProjectManagerTest {
     function test_get_all_projects() {
         $this->display_all_projects();
     }
-
 }
 
-
-?>
-
-<?php
+// Instanz erstellen und die Methoden aufrufen
 $project_manager_test = new ProjectManagerTest();
 $project_manager_test->display_all_projects();
-$project_manager_test->test_get_all_projects();
-$project_manager_test->test_get_projects_filter_id(358638433);
 ?>
-

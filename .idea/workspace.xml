@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Projekteinzelansicht frontend">
+    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Hintegrund einfarbig">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Design.css" beforeDir="false" afterPath="$PROJECT_DIR$/Design.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_projects_test.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_projects_test.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projekteinzelansicht.php" beforeDir="false" afterPath="$PROJECT_DIR$/projekteinzelansicht.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -77,7 +77,7 @@
       <workItem from="1737414387670" duration="4954000" />
       <workItem from="1737420315032" duration="564000" />
       <workItem from="1737452309634" duration="41000" />
-      <workItem from="1737480007625" duration="12087000" />
+      <workItem from="1737480007625" duration="13102000" />
     </task>
     <task id="LOCAL-00001" summary="zwischen">
       <option name="closed" value="true" />
@@ -119,7 +119,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737492133539</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Hintegrund einfarbig">
+      <option name="closed" value="true" />
+      <created>1737494079082</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1737494079082</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,6 +151,7 @@
     <MESSAGE value="Frontend, Backend anpassungen und api" />
     <MESSAGE value="+" />
     <MESSAGE value="Projekteinzelansicht frontend" />
-    <option name="LAST_COMMIT_MESSAGE" value="Projekteinzelansicht frontend" />
+    <MESSAGE value="Hintegrund einfarbig" />
+    <option name="LAST_COMMIT_MESSAGE" value="Hintegrund einfarbig" />
   </component>
 </project>
