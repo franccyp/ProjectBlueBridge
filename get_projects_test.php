@@ -88,17 +88,9 @@ class ProjectManagerTest {
         $this->display_all_projects();
     }
 
-    /**
-     * Testet die Projektsuche anhand eines Filters (z. B. nach Namen).
-     */
-    function test_get_projects_filter_id($project_id) {
-        $manager = new ProjectManager();
-        $project = $manager->get_project_by_id($project_id); // bei name den Namen des Projekts für Einzelansicht
-        print_r($project);
-    }
 }
 
-// Projektübersicht anzeigen
+
 ?>
 
 <?php

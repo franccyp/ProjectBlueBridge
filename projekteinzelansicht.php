@@ -1,9 +1,8 @@
 <?php
 include "menu.php";
-include "get_projects.php"; // Falls Projekt-Daten benötigt werden, ist nicht verwendet
+include "get_projects.php";
 
 class ProjectIndividualView {
-
     private $departmentMapping = []; // Unternehmensbereich-Mapping zwischenspeichern
     private $personCache = []; // Cache für Namen von Personen
 
@@ -16,45 +15,27 @@ class ProjectIndividualView {
         $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $url_components = parse_url($actual_link);
         parse_str($url_components['query'], $params);
-        $projectId = $params['project_id'];
-        return $projectId;
+        return $params['project_id'] ?? null;
     }
 
-    /**
-     * Hilfsfunktion, um die Priorität abzurufen.
-     */
     private function get_priority($priorityId) {
         $manager = new ProjectManager();
         $priorityUrl = 'https://dashboard-examples.blueant.cloud/rest/v1/masterdata/projects/priorities/' . $priorityId;
         $response = $manager->get_method_url($priorityUrl);
         $data = json_decode($response, true);
 
-        if (isset($data['priority']['text'])) {
-            return $data['priority']['text'];
-        }
-
-        return 'Unbekannte Priorität';
+        return $data['priority']['text'] ?? 'Unbekannte Priorität';
     }
 
-    /**
-     * Hilfsfunktion, um den Projektstatus abzurufen.
-     */
     private function get_project_status($statusId) {
         $manager = new ProjectManager();
         $statusUrl = 'https://dashboard-examples.blueant.cloud/rest/v1/masterdata/projects/statuses/' . $statusId;
         $response = $manager->get_method_url($statusUrl);
         $data = json_decode($response, true);
 
-        if (isset($data['projectStatus']['text'])) {
-            return $data['projectStatus']['text'];
-        }
-
-        return 'Unbekannter Status';
+        return $data['projectStatus']['text'] ?? 'Unbekannter Status';
     }
 
-    /**
-     * Hilfsfunktion, um die Unternehmensbereiche abzurufen.
-     */
     private function get_departments() {
         $manager = new ProjectManager();
         $departmentsUrl = 'https://dashboard-examples.blueant.cloud/rest/v1/masterdata/departments';
@@ -69,15 +50,10 @@ class ProjectIndividualView {
                 }
             }
         }
-
         return $departmentMapping;
     }
 
-    /**
-     * Hilfsfunktion, um den Namen einer Person (Projektleiter) abzurufen.
-     */
     private function get_person_name($personId) {
-        // Überprüfen, ob der Name bereits im Cache ist
         if (isset($this->personCache[$personId])) {
             return $this->personCache[$personId];
         }
@@ -89,107 +65,107 @@ class ProjectIndividualView {
 
         if (isset($data['person']['firstname'], $data['person']['lastname'])) {
             $fullname = $data['person']['firstname'] . ' ' . $data['person']['lastname'];
-            $this->personCache[$personId] = $fullname; // Im Cache speichern
+            $this->personCache[$personId] = $fullname;
             return $fullname;
         }
 
         return 'Unbekannter Projektleiter';
     }
 
-    /**
-     * Zeigt Details zu einem einzelnen Projekt an.
-     */
     public function display_project_details() {
-        $menu = new Menu(); // Menü erstellen
+        $menu = new Menu();
         $manager = new ProjectManager();
-
         $projectId = $this->get_project_id_from_url();
 
         if ($projectId) {
-            // Einzelprojekt basierend auf ID abrufen
             $project_data = $manager->get_project_by_id($projectId);
 
-            // Überprüfung ob Projekt existiert
             if (!$project_data || !isset($project_data['project'])) {
                 echo "<p>Projekt nicht gefunden.</p>";
                 return;
             }
 
             $project_data = $project_data['project'];
+            $priority = $this->get_priority($project_data['priorityId'] ?? null);
+            $status = $this->get_project_status($project_data['statusId'] ?? null);
+            $department = $this->departmentMapping[$project_data['departmentId']] ?? 'Keine Angabe';
+            $projectLeader = $this->get_person_name($project_data['projectLeaderId'] ?? null);
 
-            // Priorität abrufen
-            $priority = isset($project_data['priorityId']) ?
-                $this->get_priority($project_data['priorityId']) :
-                'Keine Priorität verfügbar';
-
-            // Projektstatus abrufen
-            $status = isset($project_data['statusId']) ?
-                $this->get_project_status($project_data['statusId']) :
-                'Nicht verfügbar';
-
-            // Unternehmensbereich abrufen
-            $department = isset($project_data['departmentId']) ?
-                ($this->departmentMapping[$project_data['departmentId']] ?? 'Unbekannter Bereich') :
-                'Keine Angabe';
-
-            // Projektleiter abrufen
-            $projectLeader = isset($project_data['projectLeaderId']) ?
-                $this->get_person_name($project_data['projectLeaderId']) :
-                'Kein Projektleiter angegeben';
-
-            // Einzelprojekt Details anzeigen
+            // Ausgabe des HTML
             echo '<!DOCTYPE html>';
             echo '<html lang="en">';
             echo '<head>';
             echo '<meta charset="UTF-8">';
             echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-            echo '<link rel="stylesheet" href="Design.css">'; // CSS-Datei verlinken
+            echo '<link rel="stylesheet" href="Design.css">';
             echo '<title>Projekt-Einzelansicht</title>';
             echo '</head>';
             echo '<body>';
             echo '<div class="flex min-h-screen">';
-
             $menu->renderMenu();
-
-            // Einzelprojekt-Inhalt
-            echo '<div class="content">';
+            echo '<div id="projekt-container">';
             echo '<h1>Projekt Einzelansicht</h1>';
-            echo '<p><strong>ID:</strong> ' . htmlspecialchars($project_data['id']) . '</p>';
-            echo '<p><strong>Name:</strong> ' . htmlspecialchars($project_data['name']) . '</p>';
-            echo '<p><strong>Projektleiter:</strong> ' . htmlspecialchars($projectLeader) . '</p>';
-            echo '<p><strong>Starttermin:</strong> ' . htmlspecialchars(isset($project_data['start']) ? $project_data['start'] : 'Unbekannt') . '</p>';
-            echo '<p><strong>Endtermin:</strong> ' . htmlspecialchars(isset($project_data['end']) ? $project_data['end'] : 'Unbekannt') . '</p>';
 
-            // Unternehmensbereich anzeigen
-            echo '<p><strong>Unternehmensbereich:</strong> ' . htmlspecialchars($department) . '</p>';
+            // Dynamische Boxen erstellen
+            echo '<div class="project-row">';
+            echo '<div class="project-box">';
+            echo '<div class="title">ID</div>';
+            echo '<div class="value">' . htmlspecialchars($project_data['id']) . '</div>';
+            echo '</div>';
 
-            // Priorität anzeigen
-            echo '<p><strong>Priorität:</strong> ' . htmlspecialchars($priority) . '</p>';
+            echo '<div class="project-box">';
+            echo '<div class="title">Name</div>';
+            echo '<div class="value">' . htmlspecialchars($project_data['name']) . '</div>';
+            echo '</div>';
+            echo '</div>'; // Ende der ersten Reihe
 
-            // Projektstatus anzeigen
-            echo '<p><strong>Projektstatus:</strong> ' . htmlspecialchars($status) . '</p>';
+            echo '<div class="project-row">';
+            echo '<div class="project-box">';
+            echo '<div class="title">Projektleiter</div>';
+            echo '<div class="value">' . htmlspecialchars($projectLeader) . '</div>';
+            echo '</div>';
 
-            echo '</div>'; // End des Hauptinhalts
-            echo '</div>'; // End des flex containers
+            echo '<div class="project-box">';
+            echo '<div class="title">Starttermin</div>';
+            echo '<div class="value">' . htmlspecialchars($project_data['start'] ?? 'Unbekannt') . '</div>';
+            echo '</div>';
+            echo '</div>'; // Ende der zweiten Reihe
+
+            echo '<div class="project-row">';
+            echo '<div class="project-box">';
+            echo '<div class="title">Endtermin</div>';
+            echo '<div class="value">' . htmlspecialchars($project_data['end'] ?? 'Unbekannt') . '</div>';
+            echo '</div>';
+
+            echo '<div class="project-box">';
+            echo '<div class="title">Unternehmensbereich</div>';
+            echo '<div class="value">' . htmlspecialchars($department) . '</div>';
+            echo '</div>';
+            echo '</div>'; // Ende der dritten Reihe
+
+            echo '<div class="project-row">';
+            echo '<div class="project-box">';
+            echo '<div class="title">Priorität</div>';
+            echo '<div class="value">' . htmlspecialchars($priority) . '</div>';
+            echo '</div>';
+
+            echo '<div class="project-box">';
+            echo '<div class="title">Projektstatus</div>';
+            echo '<div class="value">' . htmlspecialchars($status) . '</div>';
+            echo '</div>';
+            echo '</div>'; // Ende der vierten Reihe
+
+            echo '</div>'; // Ende Container
+            echo '</div>'; // Ende flex
             echo '</body>';
             echo '</html>';
         } else {
             echo '<p>Ungültige Projekt-ID.</p>';
         }
     }
-
-    function test_get_all_projects() {
-        $this->display_project_details(1);
-    }
-
-    public function get_project_by_id($project_id) {
-        $manager = new ProjectManager();
-        $project = $manager->get_project_by_id($project_id);
-        return $project;
-    }
 }
 
-// Instanz des Viewers und Anzeige eines Projekts basierend auf der übergebenen ID
+// Instanz erstellen und aufrufen
 $project_view = new ProjectIndividualView();
 $project_view->display_project_details();
 ?>
