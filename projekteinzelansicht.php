@@ -5,17 +5,19 @@ include "get_projects.php";
 class ProjectIndividualView {
     private $departmentMapping = []; // Unternehmensbereich-Mapping zwischenspeichern
     private $personCache = []; // Cache für Namen von Personen
+    private $customFieldMapping = []; // Custom Field Definitionen
 
     public function __construct() {
-        // Unternehmensbereiche laden und im Mapping speichern
+        // Unternehmensbereiche und Custom Fields laden
         $this->departmentMapping = $this->get_departments();
+        $this->customFieldMapping = $this->get_custom_field_definitions();
     }
 
     private function get_project_id_from_url() {
         $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $url_components = parse_url($actual_link);
         parse_str($url_components['query'], $params);
-        return $params['project_id'] ?? null;
+        return isset($params['project_id']) ? $params['project_id'] : null;
     }
 
     private function get_priority($priorityId) {
@@ -24,7 +26,7 @@ class ProjectIndividualView {
         $response = $manager->get_method_url($priorityUrl);
         $data = json_decode($response, true);
 
-        return $data['priority']['text'] ?? 'Unbekannte Priorität';
+        return isset($data['priority']['text']) ? $data['priority']['text'] : 'Unbekannte Priorität';
     }
 
     private function get_project_status($statusId) {
@@ -33,7 +35,7 @@ class ProjectIndividualView {
         $response = $manager->get_method_url($statusUrl);
         $data = json_decode($response, true);
 
-        return $data['projectStatus']['text'] ?? 'Unbekannter Status';
+        return isset($data['projectStatus']['text']) ? $data['projectStatus']['text'] : 'Unbekannter Status';
     }
 
     private function get_departments() {
@@ -51,6 +53,24 @@ class ProjectIndividualView {
             }
         }
         return $departmentMapping;
+    }
+
+    private function get_custom_field_definitions() {
+        $manager = new ProjectManager();
+        $customFieldsUrl = 'https://dashboard-examples.blueant.cloud/rest/v1/masterdata/customfield/definitions/Project';
+        $response = $manager->get_method_url($customFieldsUrl);
+        $data = json_decode($response, true);
+
+        $customFieldMapping = [];
+        if (isset($data['customFields'])) {
+            foreach ($data['customFields'] as $field) {
+                $customFieldMapping[$field['id']] = [
+                    'name' => $field['name'],
+                    'options' => isset($field['options']) ? $field['options'] : []
+                ];
+            }
+        }
+        return $customFieldMapping;
     }
 
     private function get_person_name($personId) {
@@ -86,24 +106,62 @@ class ProjectIndividualView {
             }
 
             $project_data = $project_data['project'];
-            $priority = $this->get_priority($project_data['priorityId'] ?? null);
-            $status = $this->get_project_status($project_data['statusId'] ?? null);
-            $department = $this->departmentMapping[$project_data['departmentId']] ?? 'Keine Angabe';
-            $projectLeader = $this->get_person_name($project_data['projectLeaderId'] ?? null);
+            $priority = $this->get_priority(isset($project_data['priorityId']) ? $project_data['priorityId'] : null);
+            $status = $this->get_project_status(isset($project_data['statusId']) ? $project_data['statusId'] : null);
+            $department = isset($this->departmentMapping[$project_data['departmentId']]) ? $this->departmentMapping[$project_data['departmentId']] : 'Keine Angabe';
+            $projectLeader = $this->get_person_name(isset($project_data['projectLeaderId']) ? $project_data['projectLeaderId'] : null);
+            $customFields = isset($project_data['customFields']) ? $project_data['customFields'] : [];
 
             // Daten für die Boxen vorbereiten
             $fields = [
                 'ID' => htmlspecialchars($project_data['id']),
                 'Name' => htmlspecialchars($project_data['name']),
                 'Projektleiter' => htmlspecialchars($projectLeader),
-                'Starttermin' => htmlspecialchars($project_data['start'] ?? 'Unbekannt'),
-                'Endtermin' => htmlspecialchars($project_data['end'] ?? 'Unbekannt'),
+                'Starttermin' => htmlspecialchars(isset($project_data['start']) ? $project_data['start'] : 'Unbekannt'),
+                'Endtermin' => htmlspecialchars(isset($project_data['end']) ? $project_data['end'] : 'Unbekannt'),
                 'Unternehmensbereich' => htmlspecialchars($department),
                 'Priorität' => htmlspecialchars($priority),
                 'Projektstatus' => htmlspecialchars($status)
             ];
 
-            // Ausgabe des HTML
+            // Erlaubte Custom Fields definieren
+            $allowedCustomFields = [
+                'Wichtigkeit',
+                'Dringlichkeit',
+                'Frage2',
+                'Antwort2',
+                'Klassifikation',
+                'Innovationsgrad',
+                'Strategiebeitrag',
+                'Sicherheitsgrad',
+                'Score',
+                'Vertraulichkeit'
+            ];
+
+            // Custom Fields hinzufügen (nur erlaubte Felder)
+            foreach ($customFields as $fieldId => $fieldValue) {
+                $fieldName = isset($this->customFieldMapping[$fieldId]['name']) ? $this->customFieldMapping[$fieldId]['name'] : null;
+
+                // Prüfen, ob das Feld in der Whitelist enthalten ist
+                if (!in_array($fieldName, $allowedCustomFields)) {
+                    continue;
+                }
+
+                $options = isset($this->customFieldMapping[$fieldId]['options']) ? $this->customFieldMapping[$fieldId]['options'] : [];
+                $resolvedValue = $fieldValue;
+
+                // Wert auflösen, falls es sich um ein Dropdown-Feld handelt
+                foreach ($options as $option) {
+                    if (isset($option['key'], $option['value']) && $option['key'] == $fieldValue) {
+                        $resolvedValue = $option['value'];
+                        break;
+                    }
+                }
+
+                $fields[$fieldName] = htmlspecialchars($resolvedValue);
+            }
+
+            // HTML-Ausgabe
             echo '<!DOCTYPE html>';
             echo '<html lang="en">';
             echo '<head>';
@@ -118,9 +176,9 @@ class ProjectIndividualView {
             echo '<div id="projekt-container">';
             echo '<h1>Projekt Einzelansicht</h1>';
 
-            // Dynamische Reihen erzeugen
+            // Dynamische Boxen anzeigen
             echo '<div class="project-row">';
-            $counter = 0; // Zählt die Boxen in der Reihe
+            $counter = 0;
             foreach ($fields as $title => $value) {
                 echo '<div class="project-box">';
                 echo '<div class="title">' . $title . '</div>';
@@ -128,9 +186,8 @@ class ProjectIndividualView {
                 echo '</div>';
 
                 $counter++;
-                // Wenn drei Boxen gefüllt sind, neue Reihe starten
                 if ($counter % 3 == 0) {
-                    echo '</div><div class="project-row">'; // Schließt die aktuelle Reihe und startet eine neue
+                    echo '</div><div class="project-row">';
                 }
             }
             echo '</div>'; // Schließt die letzte Reihe
@@ -147,4 +204,3 @@ class ProjectIndividualView {
 // Instanz erstellen und aufrufen
 $project_view = new ProjectIndividualView();
 $project_view->display_project_details();
-?>
