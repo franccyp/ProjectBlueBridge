@@ -131,7 +131,7 @@ class ProjectIndividualView {
             $department = isset($this->departmentMapping[$project_data['departmentId']]) ? $this->departmentMapping[$project_data['departmentId']] : 'Keine Angabe';
             $projectLeader = $this->get_person_name(isset($project_data['projectLeaderId']) ? $project_data['projectLeaderId'] : null);
             $customFields = isset($project_data['customFields']) ? $project_data['customFields'] : [];
-            $milestones = isset($project_data['milestones']) ? $project_data['milestones'] : [];
+            $milestones = $this->get_milestones(isset($project_data['milestone']) ? $project_data['milestone'] : null);
 
 
             // Daten für die Boxen vorbereiten
