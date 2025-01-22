@@ -92,6 +92,26 @@ class ProjectIndividualView {
         return 'Unbekannter Projektleiter';
     }
 
+    private function get_milestones($projectId)
+    {
+        $manager = new ProjectManager();
+        $milestonesUrl = "https://dashboard-examples.blueant.cloud/rest/v1/projects/{$projectId}/planningentries?entryType=milestone&fromDate=2018-09-21&toDate=2022-09-21&includeExternalSystemInformation=true&includeCustomFields=true";
+        $response = $manager->get_method_url($milestonesUrl);
+        $data = json_decode($response, true);
+
+        // Überprüfen, ob Entries existieren und ob Einträge vom Typ 'milestone' vorhanden sind
+        if (!empty($data['entries']) && is_array($data['entries'])) {
+            foreach ($data['entries'] as $entry) {
+                if ($entry['entryType'] === 'milestone') {
+                    $milestones[] = $entry;  // Alle Meilenstein-Einträge sammeln
+                }
+            }
+            return $milestones;
+        } else {
+            return [];  // Keine Meilensteine gefunden
+        }
+    }
+
     public function display_project_details() {
         $menu = new Menu();
         $manager = new ProjectManager();
@@ -111,6 +131,8 @@ class ProjectIndividualView {
             $department = isset($this->departmentMapping[$project_data['departmentId']]) ? $this->departmentMapping[$project_data['departmentId']] : 'Keine Angabe';
             $projectLeader = $this->get_person_name(isset($project_data['projectLeaderId']) ? $project_data['projectLeaderId'] : null);
             $customFields = isset($project_data['customFields']) ? $project_data['customFields'] : [];
+            $milestones = isset($project_data['milestones']) ? $project_data['milestones'] : [];
+
 
             // Daten für die Boxen vorbereiten
             $fields = [
@@ -121,8 +143,19 @@ class ProjectIndividualView {
                 'Endtermin' => htmlspecialchars(isset($project_data['end']) ? $project_data['end'] : 'Unbekannt'),
                 'Unternehmensbereich' => htmlspecialchars($department),
                 'Priorität' => htmlspecialchars($priority),
-                'Projektstatus' => htmlspecialchars($status)
+                'Projektstatus' => htmlspecialchars($status),
             ];
+
+            // Informationen aus Meilensteinen extrahieren und in die Felder einfügen
+            if (!empty($milestones)) {
+                foreach ($milestones as $milestone) {
+                    $fields['Milestone Name'] = htmlspecialchars($milestone['name']);
+                    $fields['Milestone Beschreibung'] = htmlspecialchars(isset($milestone['description']) ? $milestone['description'] : 'Keine Beschreibung');
+                    $fields['Milestone Start'] = htmlspecialchars(isset($milestone['start']) ? $milestone['start'] : 'Kein Startdatum');
+                    $fields['Milestone Ende'] = htmlspecialchars(isset($milestone['end']) ? $milestone['end'] : 'Kein Enddatum');
+                    $fields['Milestone Limitation'] = htmlspecialchars(isset($milestone['limitation']) ? $milestone['limitation'] : 'Keine Limitation');
+                }
+            }
 
             // Erlaubte Custom Fields definieren
             $allowedCustomFields = [
