@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="customer fields">
-      <change afterPath="$PROJECT_DIR$/master_data.php" afterDir="false" />
+    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Filterfunktion">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Design.css" beforeDir="false" afterPath="$PROJECT_DIR$/Design.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/get_projects.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_projects.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/get_projects_test.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_projects_test.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hilfe.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/menu.php" beforeDir="false" afterPath="$PROJECT_DIR$/menu.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projekteinzelansicht.php" beforeDir="false" afterPath="$PROJECT_DIR$/projekteinzelansicht.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projektübersichtseite.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +82,7 @@
       <workItem from="1737551107420" duration="3311000" />
       <workItem from="1737753183740" duration="1846000" />
       <workItem from="1737837128679" duration="15636000" />
-      <workItem from="1737891324971" duration="4252000" />
+      <workItem from="1737891324971" duration="6674000" />
     </task>
     <task id="LOCAL-00001" summary="zwischen">
       <option name="closed" value="true" />
@@ -172,7 +164,23 @@
       <option name="project" value="LOCAL" />
       <updated>1737841879797</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Filterfunktion">
+      <option name="closed" value="true" />
+      <created>1737922282200</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1737922282200</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Filterfunktion">
+      <option name="closed" value="true" />
+      <created>1737922298703</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1737922298703</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,6 +208,7 @@
     <MESSAGE value="Projektleier in der Übersicht und im Design 3 SPalten für Einzelansicht" />
     <MESSAGE value="Projektübersicht link weg" />
     <MESSAGE value="customer fields" />
-    <option name="LAST_COMMIT_MESSAGE" value="customer fields" />
+    <MESSAGE value="Filterfunktion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Filterfunktion" />
   </component>
 </project>

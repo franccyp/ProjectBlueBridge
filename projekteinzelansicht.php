@@ -3,12 +3,12 @@ include "menu.php";
 include "get_projects.php";
 
 class ProjectIndividualView {
-    private $departmentMapping = []; // Unternehmensbereich-Mapping zwischenspeichern
-    private $personCache = []; // Cache für Namen von Personen
-    private $customFieldMapping = []; // Custom Field Definitionen
+    private $departmentMapping = [];
+    private $personCache = [];
+    private $customFieldMapping = [];
+    private $statusCache = [];
 
     public function __construct() {
-        // Unternehmensbereiche und Custom Fields laden
         $this->departmentMapping = $this->get_departments();
         $this->customFieldMapping = $this->get_custom_field_definitions();
     }
@@ -20,7 +20,7 @@ class ProjectIndividualView {
 
         $dateObject = DateTime::createFromFormat('Y-m-d', $date);
         if ($dateObject) {
-            return $dateObject->format('d-m-Y'); // Datum ins deutsche Format ändern
+            return $dateObject->format('d-m-Y');
         }
 
         return 'Ungültiges Datum';
@@ -30,7 +30,7 @@ class ProjectIndividualView {
         $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $url_components = parse_url($actual_link);
         parse_str($url_components['query'], $params);
-        return isset($params['project_id']) ? $params['project_id'] : null;
+        return $params['project_id'] ?? null;
     }
 
     private function get_priority($priorityId) {
@@ -39,7 +39,7 @@ class ProjectIndividualView {
         $response = $manager->get_method_url($priorityUrl);
         $data = json_decode($response, true);
 
-        return isset($data['priority']['text']) ? $data['priority']['text'] : 'Unbekannte Priorität';
+        return $data['priority']['text'] ?? 'Unbekannte Priorität';
     }
 
     private function get_project_status($statusId) {
@@ -48,7 +48,7 @@ class ProjectIndividualView {
         $response = $manager->get_method_url($statusUrl);
         $data = json_decode($response, true);
 
-        return isset($data['projectStatus']['text']) ? $data['projectStatus']['text'] : 'Unbekannter Status';
+        return $data['projectStatus']['text'] ?? 'Unbekannter Status';
     }
 
     private function get_departments() {
@@ -58,13 +58,10 @@ class ProjectIndividualView {
         $data = json_decode($response, true);
 
         $departmentMapping = [];
-        if (isset($data['departments'])) {
-            foreach ($data['departments'] as $dept) {
-                if (isset($dept['id'], $dept['text'])) {
-                    $departmentMapping[$dept['id']] = $dept['text'];
-                }
-            }
+        foreach ($data['departments'] as $dept) {
+            $departmentMapping[$dept['id']] = $dept['text'];
         }
+
         return $departmentMapping;
     }
 
@@ -75,14 +72,13 @@ class ProjectIndividualView {
         $data = json_decode($response, true);
 
         $customFieldMapping = [];
-        if (isset($data['customFields'])) {
-            foreach ($data['customFields'] as $field) {
-                $customFieldMapping[$field['id']] = [
-                    'name' => $field['name'],
-                    'options' => isset($field['options']) ? $field['options'] : []
-                ];
-            }
+        foreach ($data['customFields'] as $field) {
+            $customFieldMapping[$field['id']] = [
+                'name' => $field['name'],
+                'options' => $field['options'] ?? []
+            ];
         }
+
         return $customFieldMapping;
     }
 
@@ -96,31 +92,23 @@ class ProjectIndividualView {
         $response = $manager->get_method_url($personUrl);
         $data = json_decode($response, true);
 
-        if (isset($data['person']['firstname'], $data['person']['lastname'])) {
-            $fullname = $data['person']['firstname'] . ' ' . $data['person']['lastname'];
-            $this->personCache[$personId] = $fullname;
-            return $fullname;
-        }
+        $fullname = $data['person']['firstname'] . ' ' . $data['person']['lastname'] ?? 'Unbekannt';
+        $this->personCache[$personId] = $fullname;
 
-        return 'Unbekannter Projektleiter';
+        return $fullname;
     }
 
     private function get_milestones($projectId) {
         $manager = new ProjectManager();
-        $milestonesUrl = "https://dashboard-examples.blueant.cloud/rest/v1/projects/{$projectId}/planningentries?entryType=milestone&fromDate=2018-09-21&toDate=2022-09-21&includeExternalSystemInformation=true&includeCustomFields=true";
+        $milestonesUrl = "https://dashboard-examples.blueant.cloud/rest/v1/projects/{$projectId}/planningentries";
         $response = $manager->get_method_url($milestonesUrl);
         $data = json_decode($response, true);
 
-        if (!empty($data['entries']) && is_array($data['entries'])) {
-            foreach ($data['entries'] as $entry) {
-                if ($entry['entryType'] === 'milestone') {
-                    $milestones[] = $entry;
-                }
-            }
-            return $milestones;
-        } else {
-            return [];
+        if (isset($data['entries']) && is_array($data['entries'])) {
+            return array_filter($data['entries'], fn($entry) => $entry['entryType'] === 'milestone');
         }
+
+        return [];
     }
 
     public function display_project_details() {
@@ -128,121 +116,67 @@ class ProjectIndividualView {
         $manager = new ProjectManager();
         $projectId = $this->get_project_id_from_url();
 
-        if ($projectId) {
-            $project_data = $manager->get_project_by_id($projectId);
-
-            if (!$project_data || !isset($project_data['project'])) {
-                echo "<p>Projekt nicht gefunden.</p>";
-                return;
-            }
-
-            $project_data = $project_data['project'];
-            $priority = $this->get_priority(isset($project_data['priorityId']) ? $project_data['priorityId'] : null);
-            $status = $this->get_project_status(isset($project_data['statusId']) ? $project_data['statusId'] : null);
-            $department = isset($this->departmentMapping[$project_data['departmentId']]) ? $this->departmentMapping[$project_data['departmentId']] : 'Keine Angabe';
-            $projectLeader = $this->get_person_name(isset($project_data['projectLeaderId']) ? $project_data['projectLeaderId'] : null);
-            $customFields = isset($project_data['customFields']) ? $project_data['customFields'] : [];
-            $milestones = $this->get_milestones(isset($project_data['milestone']) ? $project_data['milestone'] : null);
-
-            $fields = [
-                'Projektnummer' => htmlspecialchars($project_data['number']),
-                'Name' => htmlspecialchars($project_data['name']),
-                'Projektleiter' => htmlspecialchars($projectLeader),
-                'Starttermin' => htmlspecialchars($this->format_date(isset($project_data['start']) ? $project_data['start'] : null)),
-                'Endtermin' => htmlspecialchars($this->format_date(isset($project_data['end']) ? $project_data['end'] : null)),
-                'Unternehmensbereich' => htmlspecialchars($department),
-                'Priorität' => htmlspecialchars($priority),
-                'Projektstatus' => htmlspecialchars($status),
-            ];
-
-            if (!empty($milestones)) {
-                foreach ($milestones as $milestone) {
-                    $fields['Milestone Name'] = htmlspecialchars($milestone['name']);
-                    $fields['Milestone Beschreibung'] = htmlspecialchars(isset($milestone['description']) ? $milestone['description'] : 'Keine Beschreibung');
-                    $fields['Milestone Start'] = htmlspecialchars($this->format_date(isset($milestone['start']) ? $milestone['start'] : null));
-                    $fields['Milestone Ende'] = htmlspecialchars($this->format_date(isset($milestone['end']) ? $milestone['end'] : null));
-                    $fields['Milestone Limitation'] = htmlspecialchars(isset($milestone['limitation']) ? $milestone['limitation'] : 'Keine Limitation');
-                }
-            }
-
-
-            // Erlaubte Custom Fields definieren
-            $allowedCustomFields = [
-                'Wichtigkeit',
-                'Dringlichkeit',
-                'Frage2',
-                'Antwort2',
-                'Klassifikation',
-                'Innovationsgrad',
-                'Strategiebeitrag',
-                'Sicherheitsgrad',
-                'Score',
-                'Vertraulichkeit'
-            ];
-
-            // Custom Fields hinzufügen (nur erlaubte Felder)
-            foreach ($customFields as $fieldId => $fieldValue) {
-                $fieldName = isset($this->customFieldMapping[$fieldId]['name']) ? $this->customFieldMapping[$fieldId]['name'] : null;
-
-                // Prüfen, ob das Feld in der Whitelist enthalten ist
-                if (!in_array($fieldName, $allowedCustomFields)) {
-                    continue;
-                }
-
-                $options = isset($this->customFieldMapping[$fieldId]['options']) ? $this->customFieldMapping[$fieldId]['options'] : [];
-                $resolvedValue = $fieldValue;
-
-                // Wert auflösen, falls es sich um ein Dropdown-Feld handelt
-                foreach ($options as $option) {
-                    if (isset($option['key'], $option['value']) && $option['key'] == $fieldValue) {
-                        $resolvedValue = $option['value'];
-                        break;
-                    }
-                }
-
-                $fields[$fieldName] = htmlspecialchars($resolvedValue);
-            }
-
-            // HTML-Ausgabe
-            echo '<!DOCTYPE html>';
-            echo '<html lang="en">';
-            echo '<head>';
-            echo '<meta charset="UTF-8">';
-            echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-            echo '<link rel="stylesheet" href="Design.css">';
-            echo '<title>Projekt-Einzelansicht</title>';
-            echo '</head>';
-            echo '<body>';
-            echo '<div class="flex min-h-screen">';
-            $menu->renderMenu();
-            echo '<div id="projekt-container">';
-            echo '<h1>Projekt Einzelansicht</h1>';
-
-            // Dynamische Boxen anzeigen
-            echo '<div class="project-row">';
-            $counter = 0;
-            foreach ($fields as $title => $value) {
-                echo '<div class="project-box">';
-                echo '<div class="title">' . $title . '</div>';
-                echo '<div class="value">' . $value . '</div>';
-                echo '</div>';
-
-                $counter++;
-                if ($counter % 3 == 0) {
-                    echo '</div><div class="project-row">';
-                }
-            }
-            echo '</div>'; // Schließt die letzte Reihe
-            echo '</div>'; // Schließt den Container
-            echo '</div>'; // Schließt den Flex-Container
-            echo '</body>';
-            echo '</html>';
-        } else {
+        if (!$projectId) {
             echo '<p>Ungültige Projekt-ID.</p>';
+            return;
         }
+
+        $projectData = $manager->get_project_by_id($projectId)['project'] ?? null;
+
+        if (!$projectData) {
+            echo '<p>Projekt nicht gefunden.</p>';
+            return;
+        }
+
+        $fields = [
+            'Projektnummer' => $projectData['number'] ?? 'Unbekannt',
+            'Name' => $projectData['name'] ?? 'Unbekannt',
+            'Projektleiter' => $this->get_person_name($projectData['projectLeaderId'] ?? null),
+            'Starttermin' => $this->format_date($projectData['start'] ?? null),
+            'Endtermin' => $this->format_date($projectData['end'] ?? null),
+            'Unternehmensbereich' => $this->departmentMapping[$projectData['departmentId']] ?? 'Unbekannt',
+            'Priorität' => $this->get_priority($projectData['priorityId'] ?? null),
+            'Projektstatus' => $this->get_project_status($projectData['statusId'] ?? null),
+        ];
+
+        $milestones = $this->get_milestones($projectId);
+
+        echo '<!DOCTYPE html>';
+        echo '<html lang="de">';
+        echo '<head><meta charset="UTF-8"><link rel="stylesheet" href="Design.css"><title>Projekt Einzelansicht</title></head>';
+        echo '<body>';
+        echo '<div class="flex min-h-screen">';
+        $menu->renderMenu();
+        echo '<div id="projekt-container">';
+        echo '<h1>Projekt Einzelansicht</h1>';
+
+        echo '<div class="project-row">';
+        foreach ($fields as $title => $value) {
+            echo '<div class="project-box">';
+            echo '<div class="title">' . htmlspecialchars($title) . '</div>';
+            echo '<div class="value">' . htmlspecialchars($value) . '</div>';
+            echo '</div>';
+        }
+        echo '</div>';
+
+        if (!empty($milestones)) {
+            echo '<h2>Meilensteine</h2>';
+            echo '<ul>';
+            foreach ($milestones as $milestone) {
+                echo '<li>';
+                echo '<strong>' . htmlspecialchars($milestone['number'] ?? 'Keine Nummer') . ':</strong> ';
+                echo htmlspecialchars($milestone['description'] ?? 'Keine Beschreibung');
+                echo ' (Fortschritt: ' . htmlspecialchars($milestone['progressActual'] ?? '0') . '%)';
+                echo '</li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>Keine Meilensteine verfügbar.</p>';
+        }
+
+        echo '</div></div></body></html>';
     }
 }
 
-// Instanz erstellen und aufrufen
-$project_view = new ProjectIndividualView();
-$project_view->display_project_details();
+$projectView = new ProjectIndividualView();
+$projectView->display_project_details();
