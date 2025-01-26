@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Filterfunktion">
+    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Meilensteine">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projekteinzelansicht.php" beforeDir="false" afterPath="$PROJECT_DIR$/projekteinzelansicht.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master_data.php" beforeDir="false" afterPath="$PROJECT_DIR$/master_data.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +57,21 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="ProjectBlueBridge" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="ProjectBlueBridge" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -82,7 +97,8 @@
       <workItem from="1737551107420" duration="3311000" />
       <workItem from="1737753183740" duration="1846000" />
       <workItem from="1737837128679" duration="15636000" />
-      <workItem from="1737891324971" duration="6674000" />
+      <workItem from="1737891324971" duration="8286000" />
+      <workItem from="1737931105893" duration="1565000" />
     </task>
     <task id="LOCAL-00001" summary="zwischen">
       <option name="closed" value="true" />
@@ -180,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737922298703</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Meilensteine">
+      <option name="closed" value="true" />
+      <created>1737930430356</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1737930430356</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,6 +233,7 @@
     <MESSAGE value="Projektübersicht link weg" />
     <MESSAGE value="customer fields" />
     <MESSAGE value="Filterfunktion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Filterfunktion" />
+    <MESSAGE value="Meilensteine" />
+    <option name="LAST_COMMIT_MESSAGE" value="Meilensteine" />
   </component>
 </project>
