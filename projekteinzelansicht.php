@@ -13,6 +13,19 @@ class ProjectIndividualView {
         $this->customFieldMapping = $this->get_custom_field_definitions();
     }
 
+    private function format_date($date) {
+        if (!$date) {
+            return 'Unbekannt';
+        }
+
+        $dateObject = DateTime::createFromFormat('Y-m-d', $date);
+        if ($dateObject) {
+            return $dateObject->format('d-m-Y'); // Datum ins deutsche Format ändern
+        }
+
+        return 'Ungültiges Datum';
+    }
+
     private function get_project_id_from_url() {
         $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $url_components = parse_url($actual_link);
@@ -92,23 +105,21 @@ class ProjectIndividualView {
         return 'Unbekannter Projektleiter';
     }
 
-    private function get_milestones($projectId)
-    {
+    private function get_milestones($projectId) {
         $manager = new ProjectManager();
         $milestonesUrl = "https://dashboard-examples.blueant.cloud/rest/v1/projects/{$projectId}/planningentries?entryType=milestone&fromDate=2018-09-21&toDate=2022-09-21&includeExternalSystemInformation=true&includeCustomFields=true";
         $response = $manager->get_method_url($milestonesUrl);
         $data = json_decode($response, true);
 
-        // Überprüfen, ob Entries existieren und ob Einträge vom Typ 'milestone' vorhanden sind
         if (!empty($data['entries']) && is_array($data['entries'])) {
             foreach ($data['entries'] as $entry) {
                 if ($entry['entryType'] === 'milestone') {
-                    $milestones[] = $entry;  // Alle Meilenstein-Einträge sammeln
+                    $milestones[] = $entry;
                 }
             }
             return $milestones;
         } else {
-            return [];  // Keine Meilensteine gefunden
+            return [];
         }
     }
 
@@ -133,29 +144,27 @@ class ProjectIndividualView {
             $customFields = isset($project_data['customFields']) ? $project_data['customFields'] : [];
             $milestones = $this->get_milestones(isset($project_data['milestone']) ? $project_data['milestone'] : null);
 
-
-            // Daten für die Boxen vorbereiten
             $fields = [
-                'ID' => htmlspecialchars($project_data['id']),
+                'Projektnummer' => htmlspecialchars($project_data['number']),
                 'Name' => htmlspecialchars($project_data['name']),
                 'Projektleiter' => htmlspecialchars($projectLeader),
-                'Starttermin' => htmlspecialchars(isset($project_data['start']) ? $project_data['start'] : 'Unbekannt'),
-                'Endtermin' => htmlspecialchars(isset($project_data['end']) ? $project_data['end'] : 'Unbekannt'),
+                'Starttermin' => htmlspecialchars($this->format_date(isset($project_data['start']) ? $project_data['start'] : null)),
+                'Endtermin' => htmlspecialchars($this->format_date(isset($project_data['end']) ? $project_data['end'] : null)),
                 'Unternehmensbereich' => htmlspecialchars($department),
                 'Priorität' => htmlspecialchars($priority),
                 'Projektstatus' => htmlspecialchars($status),
             ];
 
-            // Informationen aus Meilensteinen extrahieren und in die Felder einfügen
             if (!empty($milestones)) {
                 foreach ($milestones as $milestone) {
                     $fields['Milestone Name'] = htmlspecialchars($milestone['name']);
                     $fields['Milestone Beschreibung'] = htmlspecialchars(isset($milestone['description']) ? $milestone['description'] : 'Keine Beschreibung');
-                    $fields['Milestone Start'] = htmlspecialchars(isset($milestone['start']) ? $milestone['start'] : 'Kein Startdatum');
-                    $fields['Milestone Ende'] = htmlspecialchars(isset($milestone['end']) ? $milestone['end'] : 'Kein Enddatum');
+                    $fields['Milestone Start'] = htmlspecialchars($this->format_date(isset($milestone['start']) ? $milestone['start'] : null));
+                    $fields['Milestone Ende'] = htmlspecialchars($this->format_date(isset($milestone['end']) ? $milestone['end'] : null));
                     $fields['Milestone Limitation'] = htmlspecialchars(isset($milestone['limitation']) ? $milestone['limitation'] : 'Keine Limitation');
                 }
             }
+
 
             // Erlaubte Custom Fields definieren
             $allowedCustomFields = [

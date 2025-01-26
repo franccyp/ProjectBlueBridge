@@ -18,3 +18,6 @@ Dieses Projekt ist eine webbasierte Lösung zur Anzeige und Verwaltung aktiver P
 - Backend: PHP
 - Frontend: Dynamische HTML-Oberfläche
 - API: Blue Ant REST-Webservices
+
+# Website erreichbar unter:
+http://localhost/ProjectBlueBridge/get_projects_test.php

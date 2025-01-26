@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="customer fields">
+      <change afterPath="$PROJECT_DIR$/master_data.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Design.css" beforeDir="false" afterPath="$PROJECT_DIR$/Design.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_projects.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_projects.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_projects_test.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_projects_test.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hilfe.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu.php" beforeDir="false" afterPath="$PROJECT_DIR$/menu.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekteinzelansicht.php" beforeDir="false" afterPath="$PROJECT_DIR$/projekteinzelansicht.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projektübersichtseite.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +86,11 @@
       <workItem from="1737452309634" duration="41000" />
       <workItem from="1737480007625" duration="21363000" />
       <workItem from="1737506459944" duration="70000" />
-      <workItem from="1737545648268" duration="752000" />
+      <workItem from="1737545648268" duration="3109000" />
+      <workItem from="1737551107420" duration="3311000" />
+      <workItem from="1737753183740" duration="1846000" />
+      <workItem from="1737837128679" duration="15636000" />
+      <workItem from="1737891324971" duration="4252000" />
     </task>
     <task id="LOCAL-00001" summary="zwischen">
       <option name="closed" value="true" />
@@ -151,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737500491087</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="customer fields">
+      <option name="closed" value="true" />
+      <created>1737841879797</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1737841879797</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
