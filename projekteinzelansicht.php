@@ -72,13 +72,14 @@ class ProjectIndividualView {
         $data = json_decode($response, true);
 
         $customFieldMapping = [];
-        foreach ($data['customFields'] as $field) {
-            $customFieldMapping[$field['id']] = [
-                'name' => $field['name'],
-                'options' => $field['options'] ?? []
-            ];
+        if (isset($data['customFields'])) {
+            foreach ($data['customFields'] as $field) {
+                $customFieldMapping[$field['id']] = [
+                    'name' => $field['name'],
+                    'options' => isset($field['options']) ? $field['options'] : []
+                ];
+            }
         }
-
         return $customFieldMapping;
     }
 
@@ -141,6 +142,47 @@ class ProjectIndividualView {
 
         $milestones = $this->get_milestones($projectId);
 
+        // Zugriff auf benutzerdefinierte Felder aus Projektdaten
+        $customFields = isset($projectData['customFields']) ? $projectData['customFields'] : [];
+
+        // Erlaubte Custom Fields definieren
+        $allowedCustomFields = [
+            'Wichtigkeit',
+            'Dringlichkeit',
+            'Frage2',
+            'Antwort2',
+            'Klassifikation',
+            'Innovationsgrad',
+            'Strategiebeitrag',
+            'Sicherheitsgrad',
+            'Score',
+            'Vertraulichkeit'
+        ];
+
+        // Custom Fields hinzufügen (nur erlaubte Felder)
+        foreach ($customFields as $fieldId => $fieldValue) {
+            $fieldName = $this->customFieldMapping[$fieldId]['name'] ?? null;
+
+            // Prüfen, ob das Feld in der Whitelist enthalten ist
+            if (!in_array($fieldName, $allowedCustomFields)) {
+                continue;
+            }
+
+            $options = $this->customFieldMapping[$fieldId]['options'] ?? [];
+            $resolvedValue = $fieldValue;
+
+            // Wert auflösen, falls es sich um ein Dropdown-Feld handelt
+            foreach ($options as $option) {
+                if (isset($option['key'], $option['value']) && $option['key'] == $fieldValue) {
+                    $resolvedValue = $option['value'];
+                    break;
+                }
+            }
+
+            $fields[$fieldName] = htmlspecialchars($resolvedValue);
+        }
+
+        // HTML-Ausgabe
         echo '<!DOCTYPE html>';
         echo '<html lang="de">';
         echo '<head><meta charset="UTF-8"><link rel="stylesheet" href="Design.css"><title>Projekt Einzelansicht</title></head>';

@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="Meilensteine">
+    <list default="true" id="608767e2-2895-496b-a403-f5e6be150a71" name="Changes" comment="vollständig">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master_data.php" beforeDir="false" afterPath="$PROJECT_DIR$/master_data.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekteinzelansicht.php" beforeDir="false" afterPath="$PROJECT_DIR$/projekteinzelansicht.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +98,9 @@
       <workItem from="1737753183740" duration="1846000" />
       <workItem from="1737837128679" duration="15636000" />
       <workItem from="1737891324971" duration="8286000" />
-      <workItem from="1737931105893" duration="1565000" />
+      <workItem from="1737931105893" duration="1894000" />
+      <workItem from="1737998408407" duration="2576000" />
+      <workItem from="1738059791588" duration="768000" />
     </task>
     <task id="LOCAL-00001" summary="zwischen">
       <option name="closed" value="true" />
@@ -204,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737930430356</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="vollständig">
+      <option name="closed" value="true" />
+      <created>1737934187277</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1737934187277</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,6 +244,7 @@
     <MESSAGE value="customer fields" />
     <MESSAGE value="Filterfunktion" />
     <MESSAGE value="Meilensteine" />
-    <option name="LAST_COMMIT_MESSAGE" value="Meilensteine" />
+    <MESSAGE value="vollständig" />
+    <option name="LAST_COMMIT_MESSAGE" value="vollständig" />
   </component>
 </project>
